@@ -1,23 +1,75 @@
-module test_DUT; // No tiene puertos
+module test_DUT;
+  
   //DUT I/Os
-  reg A, B, C, D;
-  wire x, y;
+  reg [7:0]A;
+  reg [7:0]B;
+  reg [5:0]opcode;
+  wire [7:0]out;
+  
   // DUT instantiation 
-  modulo_compuerta2 dut(.A(A), .B(B), .C(C), .D(D), .x(x), .y(y)); 
+  alu dut(.d0(A), .d1(B), .opcode(opcode), .out(out)); 
+  
   //Stimulus
   initial begin
-    $dumpfile("dump.vcd"); $dumpvars;
-    A = 0; 
-  	B = 1; 
-  	C = 1;
-    D = 1;
-    #1
-    D = 0;
-    #1
+    // ADD
     A = 1;
-
+    B = 1;
+    opcode = 6'b100000;
+    #1
+    if (out == 2) $display("[TEST][PASSED][ADD]");
+    else $display("[TEST][FAILED] Bad value for ADD operation %b + %b != %b", A, B, out);
+    
+    // SUB
+    #10
+    A = 4;
+    B = 1;
+    opcode = 6'b100010;
+	#1
+    if (out == 3) $display("[TEST][PASSED][SUB]");
+    else $display("[TEST][FAILED] Bad value for SUB operation %b - %b != %b", A, B, out);
+    
+    // AND
+    #10
+    A = 3;
+    B = 2;
+    opcode = 6'b100100;
+	#1
+    if (out == 2) $display("[TEST][PASSED][AND]");
+    else $display("[TEST][FAILED] Bad value for AND operation %b & %b != %b", A, B, out);
+    
+    // OR
+    #10
+    A = 4;
+    B = 3;
+    opcode = 6'b100101;
+	#1
+    if (out == 7) $display("[TEST][PASSED][OR]");
+    else $display("[TEST][FAILED] Bad value for OR operation %b | %b != %b", A, B, out);
+    
+    // XOR
+    #10
+    A = 3;
+    B = 1;
+    opcode = 6'b100110;
+	#1
+    if (out == 2) $display("[TEST][PASSED][XOR]");
+    else $display("[TEST][FAILED] Bad value for XOR operation %b ^ %b != %b", A, B, out);
+    
+    // SRA
+    // SRL
+    
+    // NOR
+    #10
+    A = 254;
+    B = 254;
+    opcode = 6'b100111;
+	#1
+    if (out == 1) $display("[TEST][PASSED][NOR]");
+    else $display("[TEST][FAILED] Bad value for NOR operation %b ^- %b != %b", A, B, out);
+    
   end
-//   Analysis
-//   initial $monitor("time=%2d A=%b, B=%b, C=%b, D=%b\n x=%b\n y=%b",$time, A, B,C,D,x,y);
+  
+  // Analysis
+  // initial $monitor("time=%2d A=%b, B=%b,opcode=%b, out=%b",$time, A, B,opcode,out);
   
 endmodule
