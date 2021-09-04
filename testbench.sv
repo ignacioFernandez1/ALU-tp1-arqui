@@ -1,13 +1,16 @@
+
 module test_DUT;
   
+  parameter N_BITS = 8;
+  
   //DUT I/Os
-  reg [7:0]A;
-  reg [7:0]B;
+  reg [N_BITS-1:0]A;
+  reg [N_BITS-1:0]B;
   reg [5:0]opcode;
-  wire [7:0]out;
+  wire [N_BITS-1:0]out;
   
   // DUT instantiation 
-  alu dut(.d0(A), .d1(B), .opcode(opcode), .out(out)); 
+  alu #(.N_BITS(N_BITS)) dut (.d0(A), .d1(B), .opcode(opcode), .out(out)); 
   
   //Stimulus
   initial begin
@@ -60,8 +63,8 @@ module test_DUT;
     
     // NOR
     #10
-    A = 254;
-    B = 254;
+    A = {{N_BITS-1{1'b1}}, {1'b0}};
+    B = A;
     opcode = 6'b100111;
 	#1
     if (out == 1) $display("[TEST][PASSED][NOR]");
