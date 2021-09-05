@@ -16,7 +16,8 @@ module alu
       6'b100100: out = d0 & d1; // and (&)
       6'b100101: out = d0 | d1; // or (|)
       6'b100110: out = d0 ^ d1; // xor (^)
-      //sra,srl
+      6'b000011: out = d0 >>> d1; // sra (>>>)
+      6'b000010: out = d0 >> d1; // srl (>>)
       6'b100111: out = ~(d0 | d1); // nor (^-)
       default: out = 8'b0000_0000;
     endcase

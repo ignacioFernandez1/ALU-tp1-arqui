@@ -59,7 +59,22 @@ module test_DUT;
     else $display("[TEST][FAILED] Bad value for XOR operation %b ^ %b != %b", A, B, out);
     
     // SRA
+    #10
+    A = 12;
+    B = 1;
+    opcode = 6'b000011;
+	#1
+    if (out == 6) $display("[TEST][PASSED][SRA]");
+    else $display("[TEST][FAILED] Bad value for SRA operation %b >>> %b != %b", A, B, out);
+    
     // SRL
+    #10
+    A = 12;
+    B = 1;
+    opcode = 6'b000010;
+	#1
+    if (out == 6) $display("[TEST][PASSED][SRL]");
+    else $display("[TEST][FAILED] Bad value for SRA operation %b >> %b != %b", A, B, out);
     
     // NOR
     #10
