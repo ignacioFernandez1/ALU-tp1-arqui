@@ -17,6 +17,7 @@ module test_top;
   
    initial begin
    
+        #100
         data_bus = 1;
         bt_1 = 1;
         
@@ -26,7 +27,7 @@ module test_top;
         data_bus = 1;
         bt_2 = 1;
        
-        #100 
+        #100
         
         bt_2 = 0;
         data_bus = 6'b100000;
@@ -52,7 +53,7 @@ module test_top;
         data_bus = 6'b100010;
         bt_3 = 1;
         
-        #105     
+        #100     
         
         $display("Valor leds = %b", leds);
    
@@ -60,11 +61,11 @@ module test_top;
         data_bus = 100;
         bt_1 = 1;
         
-        #5
+        #100
         
         bt_1 = 0;  
             
-        #100 
+        #3 
         $finish;   
    end
    

@@ -1,3 +1,5 @@
+`timescale 1ns / 1ps
+
 module alu
   #(
     parameter N_BITS = 8
@@ -18,8 +20,8 @@ module alu
       6'b100110: out = d0 ^ d1; // xor (^)
       6'b000011: out = d0 >>> d1; // sra (>>>)
       6'b000010: out = d0 >> d1; // srl (>>)
-      6'b100111: out = ~(d0 | d1); // nor (^-)
-      default: out = 8'b0000_0000;
+      6'b100111: out = ~(d0 | d1); // nor ~( | )
+      default: out = {N_BITS{1'b0}};
     endcase
   end
   

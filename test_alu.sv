@@ -1,3 +1,5 @@
+`timescale 1ns / 1ps
+
 
 module test_DUT;
   
@@ -13,77 +15,88 @@ module test_DUT;
   alu #(.N_BITS(N_BITS)) dut (.d0(A), .d1(B), .opcode(opcode), .out(out)); 
   
   //Stimulus
+    integer seed;
+
   initial begin
-    // ADD
-    A = 1;
-    B = 1;
+    //ADD
+    #10
+    seed = $urandom();
+    $srandom(seed);
+    
+    A = $urandom % 128;
+    B = $urandom % 128;
     opcode = 6'b100000;
-    #1
-    if (out == 2) $display("[TEST][PASSED][ADD]");
+    $display("A %d, B: %d",A,B);
+    #100
+    if (out == A + B) $display("[TEST][PASSED][ADD] %d + %d = %d",A, B, out);
     else $display("[TEST][FAILED] Bad value for ADD operation %b + %b != %b", A, B, out);
     
     // SUB
-    #10
-    A = 4;
-    B = 1;
+    #100
+    A = $urandom % 128;
+    B = $urandom % 128;
     opcode = 6'b100010;
-	#1
-    if (out == 3) $display("[TEST][PASSED][SUB]");
+	#100
+    if (out == A - B) $display("[TEST][PASSED][SUB] %d - %d = %d",A, B, out);
     else $display("[TEST][FAILED] Bad value for SUB operation %b - %b != %b", A, B, out);
     
     // AND
-    #10
-    A = 3;
-    B = 2;
+    #100
+    A = $urandom % 128;
+    B = $urandom % 128;
     opcode = 6'b100100;
-	#1
-    if (out == 2) $display("[TEST][PASSED][AND]");
-    else $display("[TEST][FAILED] Bad value for AND operation %b & %b != %b", A, B, out);
+	#100
+	
+    if (out == (A & B)) $display("[TEST][PASSED][AND] %b & %b = %b",A, B, out);
+    else $display("[TEST][FAILED] Bad value for AND operation %b & %b != %b",A, B, out);
     
     // OR
-    #10
-    A = 4;
-    B = 3;
+    #100
+    A = $urandom % 128;
+    B = $urandom % 128;
     opcode = 6'b100101;
-	#1
-    if (out == 7) $display("[TEST][PASSED][OR]");
+	#100
+    if (out == (A | B)) $display("[TEST][PASSED][OR] %b | %b = %b",A, B, out);
     else $display("[TEST][FAILED] Bad value for OR operation %b | %b != %b", A, B, out);
     
     // XOR
-    #10
-    A = 3;
-    B = 1;
+    #100
+    A = $urandom % 128;
+    B = $urandom % 128;
     opcode = 6'b100110;
-	#1
-    if (out == 2) $display("[TEST][PASSED][XOR]");
+	#100
+    if (out == (A ^ B)) $display("[TEST][PASSED][XOR] %b ^ %b = %b",A, B, out);
     else $display("[TEST][FAILED] Bad value for XOR operation %b ^ %b != %b", A, B, out);
     
     // SRA
-    #10
-    A = 12;
-    B = 1;
+    #100
+    A = $urandom % 128;
+    B = $urandom % 128;
     opcode = 6'b000011;
-	#1
-    if (out == 6) $display("[TEST][PASSED][SRA]");
+	#100
+    if (out ==(A >>> B)) $display("[TEST][PASSED][SRA] %b >>> %b = %b",A, B, out);
     else $display("[TEST][FAILED] Bad value for SRA operation %b >>> %b != %b", A, B, out);
     
     // SRL
-    #10
-    A = 12;
-    B = 1;
+    #100
+    A = $urandom % 128;
+    B = $urandom % 128;
     opcode = 6'b000010;
-	#1
-    if (out == 6) $display("[TEST][PASSED][SRL]");
+	#100
+    if (out == (A >> B)) $display("[TEST][PASSED][SRL] %b >> %b = %b",A, B, out);
     else $display("[TEST][FAILED] Bad value for SRA operation %b >> %b != %b", A, B, out);
     
     // NOR
-    #10
-    A = {{N_BITS-1{1'b1}}, {1'b0}};
-    B = A;
+    #100
+    A = $urandom % 128;
+    B = $urandom % 128;
     opcode = 6'b100111;
-	#1
-    if (out == 1) $display("[TEST][PASSED][NOR]");
-    else $display("[TEST][FAILED] Bad value for NOR operation %b ^- %b != %b", A, B, out);
+	#100
+    if (out == ~(A | B)) $display("[TEST][PASSED][NOR] %b ^- %b = %b",A, B, out);
+    else $display("[TEST][FAILED] Bad value for NOR operation %b ^- %b != %b ", A, B, out);
+    
+    #100 
+    $finish;
     
   end
   
